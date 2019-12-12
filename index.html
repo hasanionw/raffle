@@ -11,26 +11,40 @@
 
     <title>Hello, world!</title>
     
+    <style>
+        .modal {
+            background: transparent !important;
+        }
+
+        .modal-content {
+            background: transparent !important;
+            border: 0 !important;
+        }
+    </style>
   </head>
   <body>
     <!-- hi jay -->
     <div id="wrapper">
-        <div class="title pt-3">
-            <img src="img/kredo.png" alt="" width="200">
-        </div>
-        <div class="myContainer">
-            <div class="container leftdiv">
-                <img src="img/slotMachine1.png" alt="" width="500">
+        <div class="left-div">
+            <div class="ribbon">
+                <img src="img/ribbon.png" alt="" width="80" id="myBtn">
             </div>
-            <div class="container rightdiv text-center">
-               <small>And the winner is...</small>
-               <h1 id="winner"></h1>
+            <img src="img/spinner.png" alt="" width="350" id="spin">
+            <div class="nameContent">
+                <h3 class="text-center" id="slotContent">Winner winner chicken dinner</h3>
+            </div>
+            <div class="footer">
+                <img src="img/kredo.png" alt="" width="120">
             </div>
         </div>
-        <div class="nameContainer">
-            <div class="container-fluid">
-                <div class="card">
-                    <div class="card-body">
+        <div class="right-div">
+            <canvas id="sky"></canvas>
+            <div class="container">
+                <div class="card mt-5">
+                    <div class="card-title">
+                        <h1 class="text-center">Raffle Entries</h1>
+                    </div>
+                    <div class="card-body" id="name_container">
                         <div id="last"></div>
                     </div>
                 </div>
@@ -38,55 +52,111 @@
         </div>
     </div>
 
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img src="img/envelope.png" alt="Raffle Entry">
+
+            <div class="entry">
+                <label for="employee" class="entryLabel">Write your complete name:</label>
+                <input type="text" name="employee" id="employee" class="entryInput" required>
+
+                <input type="submit" id="entrySubmit" class="entrySubmit">
+            </div>
+        </div>
+    </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="js/snow.js"></script>
 
     <script>
         $(document).ready(function(){
+            var modal = document.getElementById("myModal");
+
+            // Get the button that opens the modal
+            var btn = document.getElementById("myBtn");
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+            var wrapper = document.getElementById("wrapper")
+
+            // When the user clicks on the button, open the modal
+            btn.onclick = function() {
+                modal.style.display = "block";
+                modal.classList.add("active")
+                darken()
+            }
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                modal.style.display = "none";
+                modal.classList.remove("active")
+                darken()
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    modal.classList.remove("active")
+                    darken()
+                }
+            }
+
+            function darken(){
+                if(modal.classList.contains("active")){
+                    wrapper.style.filter = "brightness(20%)"
+                }else{
+                    wrapper.style.filter = ""
+                }
+            }
+
             const arr = ["Weinnand", "Jay", "Thomas", "Mark ", "Mikka", "Mary", "Czarina", "Hayato", "Kurt", "Kirby", "Jan", "John", "Richell"]
             let winnerdiv = $("div.rightdiv")
-
-            $("#button").on("click", function(){
-                $(this).addClass("clicked")
-                setTimeout(() => {
-                    $(this).removeClass("clicked")
-                }, 80);
-
-                var spin = setInterval(function(){
-                    var rand = Math.floor(Math.random()*(arr.length-0))
-                    $(".slotContent").text(arr[rand])
-                    winnerdiv.css("visibility", "hidden")
-                }, 50)
-
-                setTimeout(() => {
-                    done = true
-                    clearInterval(spin);
-                    var win = $("#winner").text($(".slotContent").text()),
-                    i, namediv
-                    namediv = document.getElementsByClassName("name")
-                    for(i=0; i<arr.length; i++){
-                        if(arr[i] === $(".slotContent").text()){
-                            arr.splice(arr.indexOf($(".slotContent").text()), 1)
- 
-                        }
-                    }
-                    for(x=0; x<namediv.length; x++){
-                        if(namediv[x].innerHTML === $(".slotContent").text()){
-                            namediv[x].style.visibility = "hidden"
-                        }
-                    }
-                    console.log(arr)
-                    winnerdiv.css("visibility", "visible")
-                }, 2000)
-            })
 
             arr.forEach(listNames)
 
             function listNames(name, index){
-                $("div#last").before("<div class=\"name\" id=\""+index+"\">"+name+"</div>")
+                $("div#last").before("<div class=\"nameContainer\">"+name+"</div>")
+            }
+
+            var spin = document.getElementById("spin")
+            var slotContent = document.getElementById("slotContent")
+            spin.onclick = function(){
+                var spinning = setInterval(() => {
+                    var rand = Math.floor(Math.random()*(arr.length - 0))
+                    slotContent.innerText = arr[rand]
+                }, 50)
+
+                setTimeout(() => {
+                    clearInterval(spinning)
+                }, 3000)
+            }
+
+            var entrySubmit = document.getElementById("entrySubmit")
+            var employee = document.getElementById("employee")
+
+            entrySubmit.addEventListener("click", submit)
+
+            modal.addEventListener("keyup", function(evt){
+                if(evt.keyCode == 13){
+                    submit()
+                }
+            })
+
+            function submit(){
+                arr.push(employee.value)
+                console.log(arr)
+                $("div#last").before("<div class=\"nameContainer\">"+employee.value+"</div>")
+                alert("Successfully added!")
+                modal.style.display = "none"
+                modal.classList.remove("active")
+                darken()
+                employee.value = ""
             }
         })
     </script>

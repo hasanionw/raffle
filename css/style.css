@@ -1,127 +1,231 @@
-body, html {
-    background: black;
-    color: white;
-}
+@import url('https://fonts.googleapis.com/css?family=Caveat&display=swap');
 
-#wrapper {
-    height: 100vh;
-}
-
-.title {
-    height: 10%;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-#button {
-    cursor: pointer;
-}
-
-.myContainer {
-    display: flex;
-    height: 30%;
-}
-
-.leftdiv {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.rightdiv {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    visibility: hidden;
-}
-
-.rightdiv > h1 {
-    font-size: 3.6rem !important;
-    background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.rightdiv small {
-    color: lightgray;
-}
-
-.nameContainer {
-    position: relative;
-    color: black;
-}
-
-.nameContainer h4 {
-    margin: 0 !important;
-}
-
-.clicked {
-    -webkit-filter: brightness(80%);
-    filter: brightness(80%);
-}
-
-.slotContent {
-    position: absolute;
-    background: white;
-    color: black;
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    height: 100px;
-    width: 250px;
-    
-}
-
-.name {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 35px;
-    width: 100px;
-    background: white;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: bold;
-    border-radius: 25px;
-    color: white;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-size: 14px;
-    border-style: solid;
-    border-color: gold;
-    border-width: 1px;
-}
-
-.card {
-    max-height: 350px !important;
-    background: transparent;
-    border-color: gray;
-    border-width: 1px;
-    border-style: solid;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    outline: none;
+    border: none;
     overflow: hidden;
 }
 
+body, html {
+  font-family: 'Caveat', cursive;
+  font-size: 12px;
+  height: 100%;
+}
+
+#wrapper {
+  display: flex;
+  height: 100%;
+}
+
+.left-div {
+  display: flex;
+  width: 35%;
+  background-image: url('../img/bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  flex-direction: column;
+}
+
+.left-div #spin {
+  margin: auto;
+}
+
+.left-div #spin:hover {
+  cursor: pointer;
+  filter: brightness(80%);
+}
+
+.left-div .nameContent {
+  position: absolute;
+  font-size: 2rem;
+  top: 56%;
+  left: 11%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  height: 81px;
+  width: 176px;
+}
+
+.nameContent h3 {
+  font-family: monospace
+}
+
+.footer {
+  margin: auto;
+}
+
+.left-div .ribbon {
+  position: fixed;
+  margin-top: -70px;
+  margin-left: 20px;
+}
+
+.ribbon img:hover {
+  animation: ribbon .3s;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+@keyframes ribbon {
+  from {margin-top: 0px}
+  to {margin-top: 10px}
+}
+
+.right-div {
+  width: 65%;
+  display: flex;
+  justify-content: center;
+}
+
+.right-div h1 {
+  color: white;
+  font-size: 4rem;
+  text-shadow: -1px -1px 0 red, 1px -1px 0 red, -1px 1px 0 red, 1px 1px 0 red;
+}
+
+.right-div canvas {
+  position: absolute;
+  z-index: -1;
+  background-image: url("../img/snowbg.jpg");
+  background-size: cover;
+  background-position: right center;
+}
+
+.card, .card-header {
+  background: transparent;
+  border: 0;
+}
+
 .card-body {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.3);
+  max-height: 525px;
+  border-radius: 25px !important;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  overflow: auto;
 }
 
-#last {
+::-webkit-scrollbar {
+  width: 0;
+}
+
+.nameContainer {
+  height: 50px;
+  width: 100px;
+  background-color: white;
+  border-radius: 5px;
+  border-style: dashed;
+  border-color: red;
+  border-width: 2px;
+  color: green;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  flex-wrap: nowrap;
+  text-align: center;
+  line-height: 1.5rem;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 3px;
+}
+
+/* -----------Modal--------- */
+
+/* The Modal (background) */
+.modal {
     display: none;
-}
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0) !important;
+    background-color: rgba(0,0,0,0.4) !important;
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    position: relative;
+    background-color: none;
+    margin: 0 auto; 
+    padding: 20px;
+    /* border: 1px solid #888; */
+    width: 70%;
+  }
 
-.footerdiv {
-    display: flex;
-    bottom: 0;
-    justify-content: center;
-    align-items: center;
-}
+  .modal-content img {
+    width: 100%;
+  }
 
-.hidden {
-    visibility: hidden !important;
-}
+  .modal-content .entry {
+    width: 45%;
+    position: absolute;
+    right: 0;
+    top: 52%;
+  }
+
+  .entry .entryLabel {
+    width: 100%;
+    font-size: 32px;
+    display: inline-block;
+    color: #A89284;
+  }
+
+  .entry .entryInput {
+    width: 100%;
+    font-family: 'Caveat', cursive;
+    background: none;
+    font-size: 32px;
+    display: inline-block;
+    color: #F15B5B;
+  }
+
+  .entry .entrySubmit {
+    color: #A89284;
+    width: 75%;
+    display: inline-block;
+    font-size: 42px;
+    background: none;
+    font-family: 'Caveat', cursive;
+    margin-top: 30px;
+    padding: 10px;
+    text-align: right;
+    cursor: pointer;
+  }
+
+  .entry .entrySubmit:hover {
+    color: #F15B5B;
+  }
+
+
+  
+  /* The Close Button */
+  .close {
+    position: absolute;
+    right: 0;
+    top: 10px;
+    color: rgba(255, 255, 255, .5);
+    font-size: 64px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #F15B5B;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  #last {
+    display: none;
+  }
